@@ -1,0 +1,132 @@
+(function($) {
+    "use strict";
+
+    //PRELOADER
+    $('#preloader').delay(350).fadeOut('slow');
+
+    $('.comment-reply-link').prepend('<i class="fa fa-reply"></i> ');
+
+    // PORTFOLIO ISOTOPE
+    $(window).on("load", function() {
+        if ($('.isotope_items').length) {
+            var $container = $('.isotope_items');
+            $container.isotope();
+
+            $('.portfolio-filter ul li').on("click", function() {
+                $(".portfolio-filter ul li").removeClass("active");
+                $(this).addClass("active");
+                var selector = $(this).attr('data-filter');
+                $(".isotope_items").isotope({
+                    filter: selector,
+                    animationOptions: {
+                        duration: 750,
+                        easing: 'linear',
+                        queue: false,
+                    }
+                });
+                return false;
+            });
+        }
+
+    }); // window load end 
+
+    //Navbar Fixed
+    $(window).on('scroll', function() {
+        if ($(document).scrollTop() > 250) {
+            $('.navbar').addClass('fixed-top');
+        } else {
+            $('.navbar').removeClass('fixed-top');
+        }
+    });
+
+    // Popup Video
+    $('.popup-video').magnificPopup({
+        disableOn: 700,
+        type: 'iframe',
+        mainClass: 'mfp-fade',
+        removalDelay: 160,
+        preloader: false,
+        fixedContentPos: false
+    });
+
+    // testimonial
+    function rtl_slick() {
+        if ($('body').hasClass("rtl")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    $('.testimonial').slick({
+        dots: false,
+        arrows: true,
+        infinite: true,
+        autoplay: true,
+        rtl: rtl_slick(),
+        fade: true,
+        prevArrow: '<button type="button" class="slick-prev"><i class="fa fa-chevron-left"></i></button>',
+        nextArrow: '<button type="button" class="slick-next"><i class="fa fa-chevron-right"></i></button>',
+        speed: 1000,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        responsive: [{
+                breakpoint: 1200,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
+                    infinite: true,
+                }
+            },
+            {
+                breakpoint: 992,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
+                    arrows: true,
+                }
+            },
+            {
+                breakpoint: 767,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
+                    arrows: false,
+                }
+            }
+        ]
+    });
+
+    //Back to top
+    $(window).on('scroll', function() {
+        if ($(this).scrollTop() >= 700) {
+            $('#backtotop').fadeIn(500);
+        } else {
+            $('#backtotop').fadeOut(500);
+        }
+    });
+
+    $('#backtotop').on('click', function() {
+        $('body,html').animate({
+            scrollTop: 0
+        }, 500);
+    });
+
+    // Elementor front-end
+    $(window).on('elementor/frontend/init', function() {
+
+        elementorFrontend.hooks.addAction('frontend/element_ready/testimonials.default', function($scope, $) {
+            $scope.find('.testimonial').not('.slick-initialized').slick({
+                dots: false,
+                arrows: true,
+                infinite: true,
+                autoplay: false,
+                fade: true,
+                prevArrow: '<button type="button" class="slick-prev"><i class="fa fa-chevron-left"></i></button>',
+                nextArrow: '<button type="button" class="slick-next"><i class="fa fa-chevron-right"></i></button>',
+            })
+        });
+
+    });
+
+
+})(jQuery);
